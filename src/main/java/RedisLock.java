@@ -43,6 +43,7 @@ public class RedisLock implements Lock {
                 long currentTimeMillis = System.currentTimeMillis();
                 String lockValue = String.valueOf(currentTimeMillis + expireInSec * 1000 + 1);
 
+                //将key对应的值设置为 lockValue，当且仅当key不存在的时候,时间复杂度为o1
                 Long setnx = jedis.setnx(key, lockValue);
                 if (setnx == 1) {
                     handleLockSuccess(lockValue, expireInSec);
@@ -67,6 +68,11 @@ public class RedisLock implements Lock {
         }
     }
 
+    /**
+     * 如果锁成功，设置对应的超时时间，并且更新本地状态
+     * @param lockValue
+     * @param expireInSec
+     */
     private void handleLockSuccess(String lockValue, int expireInSec) {
         jedis.expire(key, expireInSec);
 

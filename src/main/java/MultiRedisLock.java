@@ -19,7 +19,6 @@ public class MultiRedisLock {
     private final SimpleHashShardedJedisPool jedisPool;
     /** lock信息存储的对应的redis db */
     private final int lockDBIndex;
-    //锁失效时间 单位秒
     /** 锁失效时间 单位秒 */
     private final int lockExpireSeconds;
 
